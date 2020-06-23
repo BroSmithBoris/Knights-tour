@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Knight_s_tour
 {
@@ -17,6 +18,36 @@ namespace Knight_s_tour
                     new KnightPoint(-2,-1),
                     new KnightPoint(-2,1),
                     new KnightPoint(-1,2)
+                };
+        readonly List<KnightPoint> Directions90 = new List<KnightPoint>() {
+                            new KnightPoint(2,-1),
+                            new KnightPoint(1, -2),
+                            new KnightPoint(-1,-2),
+                            new KnightPoint(-2,-1),
+                            new KnightPoint(-2,1),
+                            new KnightPoint(-1,2),
+                            new KnightPoint(1, 2),
+                            new KnightPoint(2, 1)
+                        };
+        readonly List<KnightPoint> DirectionsN = new List<KnightPoint>() {
+                    new KnightPoint(1, -2),
+                    new KnightPoint(2,-1),
+                    new KnightPoint(2, 1),
+                    new KnightPoint(1, 2),
+                    new KnightPoint(-1,2),
+                    new KnightPoint(-2,1),
+                    new KnightPoint(-2,-1),
+                    new KnightPoint(-1,-2)
+                };
+        readonly List<KnightPoint> DirectionsN90 = new List<KnightPoint>() {
+                    new KnightPoint(-2,-1),
+                    new KnightPoint(-1,-2),
+                    new KnightPoint(1, -2),
+                    new KnightPoint(2,-1),
+                    new KnightPoint(2, 1),
+                    new KnightPoint(1, 2),
+                    new KnightPoint(-1,2),
+                    new KnightPoint(-2,1)
                 };
 
         /// <summary>
@@ -45,7 +76,7 @@ namespace Knight_s_tour
         /// <param name="startPosition">Начальная позиция</param>
         /// <param name="endPosition">Конечная позиция</param>
         /// <param name="board">Доска</param>
-        public Knight(KnightPoint startPosition, KnightPoint endPosition, Board board, bool reverseDir = false)
+        public Knight(KnightPoint startPosition, KnightPoint endPosition, Board board)
         {
             Position = startPosition;
             Finish = endPosition;
@@ -54,8 +85,6 @@ namespace Knight_s_tour
             Board = board;
             Board.SetCellVisited(startPosition);
             Board.SetCellVisited(endPosition);
-
-            if (reverseDir) Directions.Reverse();
         }
 
         /// <summary>
@@ -63,17 +92,26 @@ namespace Knight_s_tour
         /// </summary>
         public bool MoveNext()
         {
-            List<BoardCell> neighbors = Board.FindNotVisitedNeighbors(Position, Directions);
+            List<KnightPoint> knightDirections = Directions;
+            if (Position.X >= Board.Width / 2 && Position.Y < Board.Height)
+                knightDirections = Directions90;
+            if (Position.X < Board.Width / 2 && Position.Y < Board.Height)
+                knightDirections = DirectionsN;
+            if (Position.X >= Board.Width / 2 && Position.Y >= Board.Height)
+                knightDirections = DirectionsN90;
+
+
+            List<BoardCell> neighbors = Board.FindNotVisitedNeighbors(Position, knightDirections);
             KnightPoint targetPoint = new KnightPoint();
 
-            int min = Directions.Count;
+            int min = knightDirections.Count;
 
             if(Rought.Count > Board.Width * Board.Height - 1)
                 Board.SetCellUnvisited(Finish);
 
             foreach (var n in neighbors)
             {
-                int notVisitedCount = Board.FindNotVisitedNeighbors(n.Position, Directions).Count;
+                int notVisitedCount = Board.FindNotVisitedNeighbors(n.Position, knightDirections).Count;
                 if (notVisitedCount <= min)
                 {
                     min = notVisitedCount;
@@ -143,7 +181,6 @@ namespace Knight_s_tour
                     }
                 }
             }
-
             return false;
         }
     }
