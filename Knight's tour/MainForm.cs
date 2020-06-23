@@ -136,7 +136,7 @@ namespace Knight_s_tour
                 //Запуск передвижения коня
                 KnightTour();
             }
-                pictureGraphics.Image = new Bitmap(BoardBitmap);
+            pictureGraphics.Image = new Bitmap(BoardBitmap);
             //Отключение режима рисования
             gdi.Dispose();
         }
@@ -150,23 +150,30 @@ namespace Knight_s_tour
             var boardHeight = BoardBitmap.Height / pixelSize;
             GameBoard = new Board(boardWidth, boardHeight);
             Knight = new Knight(startPosition, endPosition, GameBoard);
-
             //Включаем режим рисования
             var gdi = Graphics.FromImage(BoardBitmap);
-            //Обход всей доски
-            
-            for (int i = 0; i < (boardWidth * boardHeight - 25); i++)
+
+            var firstWhite = (startPosition.X + startPosition.Y) % 2 == 0;
+            var secondWhite = (endPosition.X + endPosition.Y) % 2 == 0;
+            var boardEven = (GameBoard.Width * GameBoard.Height) % 2 == 0;
+
+            if ((boardEven && (firstWhite ^ secondWhite)) || !boardEven && (firstWhite == secondWhite))
             {
-                var canMove = Knight.MoveNext();
-                if(!canMove)
-                    break;
+
+                //Обход всей доски
+                for (int i = 0; i < (boardWidth * boardHeight - 25); i++)
+                {
+                    var canMove = Knight.MoveNext();
+                    if (!canMove)
+                        break;
+                }
+
+
+                GameBoard.SetCellUnvisited(endPosition);
+                Knight.MoveNextBacktrackingRecursive(Knight.Position);
             }
-            
 
-            GameBoard.SetCellUnvisited(endPosition);
-            Knight.MoveNextBacktrackingRecursive(Knight.Position);
-
-            if(Knight.Rought.Count <= boardWidth * boardHeight)
+            if(Knight.Rought.Count == boardWidth * boardHeight)
             {
                 for(int d = 0; d < Knight.Rought.Count; d++)
                 {

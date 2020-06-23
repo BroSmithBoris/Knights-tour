@@ -45,7 +45,7 @@ namespace Knight_s_tour
         /// <param name="startPosition">Начальная позиция</param>
         /// <param name="endPosition">Конечная позиция</param>
         /// <param name="board">Доска</param>
-        public Knight(KnightPoint startPosition, KnightPoint endPosition, Board board)
+        public Knight(KnightPoint startPosition, KnightPoint endPosition, Board board, bool reverseDir = false)
         {
             Position = startPosition;
             Finish = endPosition;
@@ -54,6 +54,8 @@ namespace Knight_s_tour
             Board = board;
             Board.SetCellVisited(startPosition);
             Board.SetCellVisited(endPosition);
+
+            if (reverseDir) Directions.Reverse();
         }
 
         /// <summary>
@@ -90,9 +92,10 @@ namespace Knight_s_tour
             return false;
         }
 
-        bool isValid(KnightPoint point)
+        bool IsValid(KnightPoint point)
         {
-            return (point.X >= 0 && point.X < Board.Width && point.Y >= 0 && point.Y < Board.Height && !Board.GetCell(point).Visited);
+            return (point.X >= 0 && point.X < Board.Width && point.Y >= 0 
+                && point.Y < Board.Height && !Board.GetCell(point).Visited);
         }
 
         public bool MoveNextBacktrackingRecursive(KnightPoint point)
@@ -111,7 +114,7 @@ namespace Knight_s_tour
             {
                 nextPoint.X = point.X + Directions[k].X;
                 nextPoint.Y = point.Y + Directions[k].Y;
-                if (Rought.Count == (Board.Width * Board.Height - 1) && isValid(nextPoint))
+                if (Rought.Count == (Board.Width * Board.Height - 1) && IsValid(nextPoint))
                 {
                     Rought.Add(nextPoint);
                     Board.SetCellVisited(nextPoint);
@@ -125,7 +128,7 @@ namespace Knight_s_tour
                         Board.SetCellUnvisited(nextPoint);
                     }
                 }
-                else if (isValid(nextPoint) && (nextPoint.X != Finish.X || nextPoint.Y != Finish.Y))
+                else if (IsValid(nextPoint) && (nextPoint.X != Finish.X || nextPoint.Y != Finish.Y))
                 {
                     Rought.Add(nextPoint);
                     Board.SetCellVisited(nextPoint);
