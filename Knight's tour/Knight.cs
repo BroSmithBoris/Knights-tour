@@ -130,12 +130,11 @@ namespace Knight_s_tour
             return false;
         }
 
-        bool IsValid(KnightPoint point)
-        {
-            return (point.X >= 0 && point.X < Board.Width && point.Y >= 0 
-                && point.Y < Board.Height && !Board.GetCell(point).Visited);
-        }
-
+        /// <summary>
+        /// Поиск пути бэктрекингом
+        /// </summary>
+        /// <param name="point">Позиция коня</param>
+        /// <returns>Найден ли путь</returns>
         public bool MoveNextBacktrackingRecursive(KnightPoint point)
         {
             var nextPoint = new KnightPoint();
@@ -182,6 +181,17 @@ namespace Knight_s_tour
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Проверка, находится ли точка в приделах стола
+        /// </summary>
+        /// <param name="point">Проверяемая точка</param>
+        /// <returns>Принадлежность</returns>
+        bool IsValid(KnightPoint point)
+        {
+            return (point.X >= 0 && point.X < Board.Width && point.Y >= 0
+                && point.Y < Board.Height && !Board.GetCell(point).Visited);
         }
     }
 }
