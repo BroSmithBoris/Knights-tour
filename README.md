@@ -19,7 +19,7 @@
 - Открыть проект.
 - Собрать.
 ## Изображение интерфейса программы
-![Окно программы](https://i.ibb.co/XXFCPY7/1.png "Окно программы")
+[![Окно программы](https://i.ibb.co/XXFCPY7/1.png "Окно программы")](https://ibb.co/XXFCPY7)
 
 ## Видео работы программы
 [![Видео работы программы](https://img.youtube.com/vi/p2bCHrzleU0/0.jpg)](https://youtu.be/p2bCHrzleU0)
